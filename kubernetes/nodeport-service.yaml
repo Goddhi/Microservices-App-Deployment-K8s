@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stateless-flask-nodeport-svc
+  namespace: stateless-namespace
+spec:
+  type: NodePort
+  selector:
+    app: stateless-flask
+  ports:
+  - port: 5000
+    targetPort: 5000
+    protocol: TCP
+    nodePort: 30000

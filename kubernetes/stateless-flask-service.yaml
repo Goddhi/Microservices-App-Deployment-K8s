@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stateless-flask
+  namespace: stateless-namespace
+spec:
+  selector:
+    app: stateless-flask
+  ports:
+  - name: http
+    protocol: TCP
+    port: 5000
+    targetPort: 5000

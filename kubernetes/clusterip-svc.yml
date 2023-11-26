@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stateless-flask-clusterip-svc
+  namespace: stateless-namespace
+spec:
+  type: ClusterIP
+  selector: 
+    app: stateless-flask
+  ports:
+  - port: 5000
+    targetPort: 5000
+    

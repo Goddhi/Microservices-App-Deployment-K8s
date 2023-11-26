@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: statesless-flask
+  namespace: stateless-namespace
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: stateless-flask
+  template:
+    metadata:
+      labels:
+        app: stateless-flask
+    spec:
+      containers:
+      - image: daredrexel/stateless-flask:v0
+        name: stateless-flask
+        ports:
+        - containerPort: 5000
+
+  
