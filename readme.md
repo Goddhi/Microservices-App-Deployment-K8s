@@ -336,3 +336,46 @@ Start by installing Helm on your development server:
 helm install nginx-ingress ingress-nginx/ingress-nginx --set controller.publishService.enabled=true
 
 helm install nginx-ingress ingress-nginx/ingress-nginx --set controller.publishService.enabled=true
+
+It is a good practice to create a dedicated Namespace for the Ingress
+controller but here we will use the default Namespace to keep things
+simple. If you want to use Helm to install the Ingress controller in a
+dedicated Namespace, you can use the following command:
+
+`helm install nginx-ingress ingress-nginx/ingress-nginx --set controller.publishService.enabled=true --namespace default`
+
+The helm install command installs the Nginx Ingress controller from the
+stable charts repository. It defines the publishService parameter to true
+which means that the Ingress controller will be published as a service. Because we didn’t specify a Namespace, Helm will install the controller in the default Namespace.
+
+Now, we can list the Pods and Services in the default Namespace:
+1 kubectl get pods -n default
+2 # or kubectl get pods
+3 kubectl get services -n default
+4 # or kubectl get services
+
+
+For minikube installation
+[ingress-installation-miniube](https://kubernetes.io/docs/tasks/access-application-cluster/ingress-minikube/)
+
+
+The Nginx Ingress controller is deployed as a Pod in the default
+Namespace. It is also published as a service in the default Namespace. 
+NOTE: for minikube the ingress controller pod is deploy to the kube-system namspace
+We should configure the Ingress controller to use the ClusterIP service we
+created earlier. To do so, we need to create the Ingress resource.
+Note that the ingress Controller is not the Ingress resource. The Ingress resource is a Kubernetes resource that defines the routing rules and is used by the Ingress controller to route the traffic to the Pods through the ClusterIP service.
+
+This is an example of an Ingress resource:
+check `kubernetes/ingress.yaml`
+
+We can also add namespace field to the metadata section to specify the Namespace where the service is deployed.
+If we use the above Ingress resource, we will have an Ingress in the default
+Namespace, while our application was deployed in the stateless-flask
+Namespace. This is a problem as the Ingress controller will not be able to route the traffic to the Pods.
+
+To solve this problem, we need to create an ExternalName service in the
+stateless-flask Namespace that points to the ClusterIP service in the
+default Namespace. The ExternalName service is a special type of service
+that allows to route traffic to a service in another Namespace
+check `kubernetes/stateless-flask-service-externalname.yaml`
