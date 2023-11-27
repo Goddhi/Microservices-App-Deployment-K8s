@@ -379,3 +379,9 @@ stateless-flask Namespace that points to the ClusterIP service in the
 default Namespace. The ExternalName service is a special type of service
 that allows to route traffic to a service in another Namespace
 check `kubernetes/stateless-flask-service-externalname.yaml`
+
+And apply it:
+`kubectl apply -f kubernetes/stateless-flask-service-externalname.yaml`
+
+Verify that the ExternalName service is created:
+`kubectl get services -n default`
