@@ -4,15 +4,15 @@ metadata:
   name: my-ingress
 spec:
   rules:
-  - host: 
+  - host: stateless-flask.10.99.202.194.sslip.io ### stateless-flask.<ingress-ip>.nip.io
     http:
-      paths:
-      - path:
+      paths: 
+      - path: /tasks
         pathType: Prefix
         backend:
           service:
-            name:
-            port:
+            name: stateless-flask-service-externalname
+            port: 
               number: 5000
   ingressClassName: nginx
 
@@ -26,4 +26,11 @@ spec:
 # The ingressClassName field specifies the name of the ingress class to
 # use for this ingress. In this case, it specifies the Nginx ingress
 # controller.
+
+# In the above Ingress resource, we have specified the host name stateless-
+# flask.<ingress-ip>.nip.io. Make sure to change <ingress-ip> with
+# the IP address of the Ingress controller. You can get the IP address of the
+# Ingress controller with the following command:
+
+# kubectl get services nginx-ingress-ingress-nginx-controller
 
