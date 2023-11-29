@@ -32,9 +32,14 @@ spec:
           claimName: postgres-pv-claim
       
 
-
-
-          
-    
-
-## 
+# envFrom defines an environment variable from a ConfigMap resource
+# named postgres-config .
+# The container requires a volume for persistent storage, defined in the
+# volumes field.
+# The volume is named postgredb and is backed by a
+# PersistentVolumeClaim (PVC) named postgres-pv-claim .
+# The volumeMounts field in the container configuration specifies the
+# volume and its mount path.
+# In this case, the mount path is /var/lib/postgresql/data and the
+# subpath is postgres , which means that the PostgreSQL database data
+# is stored in the postgres directory of the volume.

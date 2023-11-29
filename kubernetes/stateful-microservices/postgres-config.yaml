@@ -4,7 +4,7 @@ metadata:
   name: postgres-config
   namespace: postgress-namespace
   labels:
-    app: postgress
+    app: postgres
 data:
   POSTGRES_DB: stateful-flask-db
   POSTGRES_USER: stateful-flask-user

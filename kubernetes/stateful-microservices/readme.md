@@ -98,7 +98,62 @@ Although not the best resource to use with PostgreSQL, we will use the Deploymen
 
 check `kubernetes/postgres-deployment.yaml`
 
-NOTE: Reasons why PVC status is pending
+NOTE: **Reasons why PVC status is pending**
 StorageClass specified in the pvc  does not exist
 Insufficient Available PVs
 etc
+
+
+**why is it more important to use a configmap volume rather than configmap environment variable**
+
+Let’s apply the Deployment:
+Using a `ConfigMap` volume instead of environment variables from a `ConfigMap` in Kubernetes can have several advantages, depending on the use case. While both methods are valid and have their own applications, here are some reasons why using a `ConfigMap` as a volume might be more suitable in certain scenarios:
+
+### 1. **File-Based Configuration**:
+   - **Complex Configurations**: When the configuration data is complex and better represented in a file format (like `.ini`, `.yaml`, or `.json`), using a volume is more suitable. It's easier to mount the entire configuration file rather than breaking it down into individual environment variables.
+   - **Application Design**: Some applications are designed to read configuration from files and might not support environment variable configurations.
+
+### 2. **Dynamic Updates**:
+   - **Reload without Restarting**: Changes to `ConfigMap` volumes can be reflected in the mounted files without restarting the pod (though it may take some time to update). In contrast, environment variables require the pod to be restarted to pick up changes.
+   - **Dynamic Configuration Changes**: This is particularly important for applications that can reload their configuration files without needing a full restart.
+
+### 3. **Configuration Size**:
+   - **Large Configurations**: There's a practical limit to how much data you can place in environment variables. Large configuration data is more efficiently handled through volumes.
+
+### 4. **Organization and Clarity**:
+   - **Separation of Configuration**: Keeping configuration in files can be more organized, especially when dealing with multiple configuration files. It can help maintain clarity, as each config file can be dedicated to a specific aspect of the application settings.
+   - **Ease of Management**: It’s often easier to manage and version control a file rather than several environment variables, especially when these configurations need to be replicated across multiple environments.
+
+### 5. **Security**:
+   - **Reduced Exposure**: Environment variables can be exposed to any process running in the container, and in some cases, might be logged or inadvertently exposed. Using files can limit this exposure, especially for sensitive configurations.
+
+### 6. **Compatibility**:
+   - **Non-String Data**: Some configurations might involve binary data, which is not well-suited for environment variables. Files can handle any type of data without issues.
+
+### 7. **File System Abstractions**:
+   - **Symlinks and File Structures**: Applications that expect certain file system structures (like symlinks, directories, etc.) can be more easily accommodated with volumes.
+
+### Use Cases for Environment Variables
+Despite these advantages, using environment variables for configuration is still suitable in many cases, especially when dealing with simple, flat configuration that doesn’t change often, or when the application is specifically designed to consume configuration from environment variables.
+
+### Conclusion
+The choice between using a `ConfigMap` volume or environment variables depends largely on the nature of the application, the complexity and size of the configuration data, security considerations, and the need for dynamic updates without restarting pods. It's important to evaluate these factors in the context of your specific use case.
+
+#### Creating a Service for PostgreSQL
+check `postgres-service.yaml`
+
+Then we will create the service:
+kubectl apply -f postgres-service.yaml
+
+### Creating a Deployment for our application
+We are going to change the application code in a way that it will connect to the PostgreSQL database and store every todo item in the database. To do this, we will use the following YAML file:
+
+**setting up virtual enviroment**
+```
+pip install virtualenvwrapper
+export WORKON_HOME=$HOME/.virtualenvs
+export VIRTUALENVWRAPPER_PYTHON=/usr/bin/python3
+export VIRTUALENVWRAPPER_VIRTUALENV=/usr/bin/virtualenv
+source /usr/local/bin/virtualenvwrapper.sh
+```
+`mkvirtualenv 'directory-name'`
