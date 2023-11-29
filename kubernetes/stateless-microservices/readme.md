@@ -26,7 +26,11 @@ Then create the folders for our Flask application and install its dependencies.
 
 The python code, create a simple todo application:
 Next, we are going to create a Dockerfile:
+source "/usr/bin/virtualenv.sh"
 
+
+export WORKON_HOME=~/.virtualenvs
+source /usr/local/bin/virtualenvwrapper.sh
 
 We can now build the image and run it to test it.
 1 `docker build -t stateless-flask:v0 -f app/Dockerfile app`

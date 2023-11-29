@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-config
+  namespace: postgress-namespace
+  labels:
+    app: postgress
+data:
+  POSTGRES_DB: stateful-flask-db
+  POSTGRES_USER: stateful-flask-user
+  POSTGRES_PASSWORD: stateful-flask-password

@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: PersistentVolume 
+metadata:   ### PersitentVolume is not restriced to a namespace, it is cluster based resource
+  name: postgres-pv-volume
+  labels:
+    app: postgres
+spec:
+  # storageClassName: db-block-storage
+  capacity:
+    storage: 5Gi
+  accessModes:
+  - ReadWriteMany
+  hostPath:
+    path: "/mnt/data"
+
+
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pv-claim
+  namespace: postgress-namespace
+  labels:
+    app: postgres
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  # storageClassName: db-block-storage
+  
+
+#   The storageClassName is set [pto do-block-storage , which
+# defines the type of storage class used.
+# The capacity is set to 5Gi and accessModes is set to
+# ReadWriteMany , which means that the volume can be read and
+# written to by multiple pods at the same time.
+# The hostPath specifies the physical path of the volume in the
+# host machine.
+  
+
+  # PersistentVolumeClaim:
+# The PVC is defined with kind set to PersistentVolumeClaim and
+# metadata defining the name , namespace , and labels .
+# The accessModes is set to ReadWriteOnce , which means the
+# volume can be read and written to by a single pod at a time.
+# The resources defines the amount of storage requested for the
+# PVC.
+# Finally, storageClassName is set to do-block-storage , which
+# corresponds to the storage class used by the PV.
+
+# ReadWriteOnce :
+# The volume can be mounted as read-write by a single
+# node. ReadWriteOnce access mode still can allow multiple pods to
+# access the volume when the pods are running on the same node.
+# ReadOnlyMany : The volume can be mounted as read-only by many
+# nodes.
+# ReadWriteMany : The volume can be mounted as read-write by many
+# nodes.
+# ReadWriteOncePod : The volume can be mounted as read-write by a
+# single Pod. Use ReadWriteOncePod access mode if you want to ensure
+# that only one pod across the whole cluster can read that PVC or write
+# to it. This is only supported for CSI volumes and Kubernetes version
+# 1.22
+
