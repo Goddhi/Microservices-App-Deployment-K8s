@@ -157,3 +157,63 @@ export VIRTUALENVWRAPPER_VIRTUALENV=/usr/bin/virtualenv
 source /usr/local/bin/virtualenvwrapper.sh
 ```
 `mkvirtualenv 'directory-name'`
+
+Freeze the dependencies:
+`pip freeze > requirements.txt`
+
+Now we will change the application code. We will add the following code
+to the app.py file:
+
+check `app/app.py`
+
+Build the image:
+`docker build -t stateful-flask:v0 -f app/Dockerfile app`
+
+Run the container to test the application:
+`docker run -it -p 5000:5000 stateful-flask:v0`
+
+You should see an error while connecting to the database, which is normal
+because we haven’t deployed the application to the cluster, it’s just a local
+test.
+
+We can re-tag and push the image to Docker Hub:
+
+I’m using the image daredrexel/stateful-flask:v0 which is the image I pushed to Docker Hub. You can use your own image.
+
+Then we will create the Deployment:
+`kubectl apply -f app-deployment.yml`
+
+We can check status of the Deployment
+`kubectl get pods -n stateful-namespace`
+
+Finally, we need to migrate the database:
+
+
+`export pod=$(kubectl get pods -n stateful-namspace -l app=stateful-flask -o jsonpath='{.items[0].metadata.name}')`
+
+`kubectl exec -it $pod -n stateful-namspace -- flask db init`
+`kubectl exec -it $pod -n stateful-namspace -- flask db migrate`
+`kubectl exec -it $pod -n stateful-namspace -- flask db upgrade`
+
+### Creating a Service for our application
+We are going to use a ClusterIP service to expose the application to the
+cluster. To do this, we will use the following YAML file:
+check `stateful-flask-service.yml`
+
+Apply the service::
+`kubectl apply -f stateful-flask-service.yml`
+
+
+### Creating an external Service for our application
+Since the Ingress controller is in a different namespace, we need to create an external service to expose the application to the cluster. To do this, we
+will use the following YAML file:
+**Although Ingress controller is a Cluster based resource**
+check `stateful-flask-service-externalname.yml`
+
+Apply the service:
+`kubectl apply -f stateful-flask-service-externalname.yaml`
+
+#### Creating an Ingress for our application
+check `ingress.yml`
+
+

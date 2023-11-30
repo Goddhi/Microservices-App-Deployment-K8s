@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: stateful-flask-deployment
+  namespace: stateful-namspace
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: stateful-flask
+  template:
+    metadata:
+      labels:
+        app: stateful-flask
+    spec:
+      containers:
+      - image: daredrexel/stateful-flask:v0
+        name: stateful-flask
+        ports:
+        - containerPort: 5000
+        imagePullPolicy : Always

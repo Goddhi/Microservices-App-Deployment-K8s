@@ -1,12 +1,32 @@
-# base image
-FROM python:3.9-slim-buster  
-#working directory
+### App Stateful docker image
+
+## base image
+FROM python:3.9-slim-buster
+## working directory
 WORKDIR /app
-# Copy the current directory contents into the container at /app
+#### Copy present working directory to /app directory
 COPY . /app
-# Install any needed packages specified in requirements.txt
+### run all dependencies present requirement.txt file
 RUN pip install --no-cache-dir -r requirements.txt
-# Make port 5000 available to the world outside this container
+### expose port 5000 as the application port
 EXPOSE 5000
-# Define environment variable
 CMD ["python", "app.py"]
+
+
+
+
+
+### App Stateless docker image
+
+# base image
+# FROM python:3.9-slim-buster  
+# #working directory
+# WORKDIR /app
+# # Copy the current directory contents into the container at /app
+# COPY . /app
+# # Install any needed packages specified in requirements.txt
+# RUN pip install --no-cache-dir -r requirements.txt
+# # Make port 5000 available to the world outside this container
+# EXPOSE 5000
+# # Define environment variable
+# CMD ["python", "app.py"]

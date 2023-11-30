@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: stateful-flask-service-externalname
+  namespace: default
+spec: 
+  type: ExternalName
+  externalName: stateful-flask.stateful-flask.svc.cluster.local   ### targetting the deployment service 

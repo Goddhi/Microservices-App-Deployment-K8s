@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+  name: stateful-flask
+  namespace: stateful-namspace
+spec:
+  selector:
+    app: stateful-flask
+  ports:
+  - name: http
+    port: 5000
+    targetPort: 5000
+    protocol: TCP
