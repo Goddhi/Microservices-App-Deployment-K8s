@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: stateful-flask-deployment
-  namespace: stateful-namspace
+  namespace: stateful-namespace
 spec:
   replicas: 1
   selector:
