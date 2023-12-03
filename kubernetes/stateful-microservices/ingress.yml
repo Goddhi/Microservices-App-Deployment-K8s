@@ -4,7 +4,7 @@ metadata:
   name: my-ingress
 spec:
   rules:
-  - host: stateful-flask.<node-ip>.nip.io
+  - host: drexii.me
     http:
       paths:
       - path: /tasks

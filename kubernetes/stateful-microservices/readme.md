@@ -189,11 +189,11 @@ We can check status of the Deployment
 Finally, we need to migrate the database:
 
 
-`export pod=$(kubectl get pods -n stateful-namspace -l app=stateful-flask -o jsonpath='{.items[0].metadata.name}')`
+`export pod=$(kubectl get pods -n stateful-namespace -l app=stateful-flask -o jsonpath='{.items[0].metadata.name}')`
 
-`kubectl exec -it $pod -n stateful-namspace -- flask db init`
-`kubectl exec -it $pod -n stateful-namspace -- flask db migrate`
-`kubectl exec -it $pod -n stateful-namspace -- flask db upgrade`
+`kubectl exec -it $pod -n stateful-namespace -- flask db init`
+`kubectl exec -it $pod -n stateful-namespace -- flask db migrate`
+`kubectl exec -it $pod -n stateful-namespace -- flask db upgrade`
 
 ### Creating a Service for our application
 We are going to use a ClusterIP service to expose the application to the
@@ -215,5 +215,59 @@ Apply the service:
 
 #### Creating an Ingress for our application
 check `ingress.yml`
+
+**minikube addons enable ingress**
+
+Apply the Ingress:
+`kubectl apply -f ingress.yml`
+### Checking logs and making sure everything is working
+for the stateful-application
+`kubectl -n stateful-namespace logs stateful-flask-deployment-78bfbc8866-mjgb2`
+
+However if you have multiple Pods and want to see the logs of all of them,
+you can use the -l flag to specify the label selector:
+`kubectl -n stateful-namespace logs -l app=stateful-flask`
+
+You can also use the -f flag to follow the logs:
+`kubectl -n stateful-flask logs -f -l app=stateful-flask`
+
+Then we can go to http://drexii.me/tasks to see the application in action.
+`curl http://drexii.me/tasks`
+**NOTE**
+the url will only work inside the cluster because minikube doesnt have an external ip address. so we are using the ingress ip-address
+
+
+To make a POST request to the application and add a task, we can use curl
+(or Postman). For example, to add a task with the title “My first task” and
+the description “This is my first task”, we can run:
+```
+curl -X POST -H "Content-Type: application/json" -d '{"title":"My first task", "description":"This is my first task"}' "http://drexii.me/tasks"
+```
+
+Now, you can make a GET request to the application to see the tasks that you have added:
+`curl http://drexii.me/tasks`
+
+If we delete all Pods of the application and all Pods of the database, we will not lose the data because the data is stored in the PersistentVolumeClaim.
+
+To delete all Pods of the application, we can run:
+
+`kubectl delete -f kubernetes/deployment.yaml`
+`kubectl delete -f kubernetes/postgres-deployment.yaml`
+
+**Redeploy the application:**
+`kubectl apply -f kubernetes/deployment.yaml`
+`kubectl apply -f kubernetes/postgres-deployment.yaml`
+
+Now, if we make a GET request to the application, we will see the tasks that we added before:
+`curl http://drexii.me`
+
+NEXT:
+Deploying StatefulMicroservices: StatefulSets
+
+**Things to observe**
+when the deployment (postgres-deployment) is scaled up, it doesnt create additional pvc, pv for the pods, individual pods does not have their own pvc and pv..
+`kubectl scale deployment postgres --replicas=2 -n postgress-namespace`
+this is why DEPLOYMENT isnt used for stateful application, because of no data integrity of individual pods...
+this why we make use of STATEFULSET for stateful applications
 
 

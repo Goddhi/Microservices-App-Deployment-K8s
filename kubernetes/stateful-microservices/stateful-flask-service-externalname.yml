@@ -5,4 +5,4 @@ metadata:
   namespace: default
 spec: 
   type: ExternalName
-  externalName: stateful-flask.stateful-flask.svc.cluster.local   ### targetting the deployment service 
+  externalName: stateful-flask.stateful-namespace.svc.cluster.local   ### targetting the deployment service 

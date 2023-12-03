@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: postgres
+  namespace: postgress-namespace
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec: 
+      containers:
+      - name: postgres
+        image: postgres:10.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 5432
+        envFrom:
+        - configMapRef:
+            name: postgres-config
+        volumeMounts:
+        - name: postgresdb-volume
+          mountPath: /var/lib/postgresql/data
+          subPath: postgres
+        env:
+        - name: PGDATA
+          value: /var/lib/postgresql/data/pgdata
+  volumeClaimTemplates:
+  - metadata:
+      name: postgresdb-volume  ### this volume name is referenced in volumeMounts
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      # storageClassName: "do-block-storage"
+      resources:
+        requests:
+          storage: 2Gi
+
+          
+  

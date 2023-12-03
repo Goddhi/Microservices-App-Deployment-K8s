@@ -27,7 +27,7 @@ spec:
           subPath: postgres
           name: postgresdb
       volumes:
-      - name: postgresdb
+      - name: postgresdb  ## this volume name is referenced in the volumeMount
         persistentVolumeClaim:
           claimName: postgres-pv-claim
       
