@@ -19,3 +19,31 @@ spec:
         ports:
         - containerPort: 5000
         imagePullPolicy : Always
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: stateful-flask-secret
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: stateful-flask-secret
+              key: DB_PASSWORD
+        - name: DB_HOST
+          valueFrom:
+            secretKeyRef:
+              name: stateful-flask-secret
+              key: DB_HOST 
+        - name: DB_NAME
+          value: stateful-flask-db
+        - name: DB_PORT
+          valueFrom: 
+            secretKeyRef:
+              name: stateful-flask-secret
+              key: DB_PORT
+
+            
+
+            
+
