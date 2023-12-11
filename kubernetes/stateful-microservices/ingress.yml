@@ -2,6 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: my-ingress
+  namespace: default
 spec:
   rules:
   - host: drexii.me
@@ -14,4 +15,4 @@ spec:
             name: stateful-flask-service-externalname
             port:
               number: 5000
-  ingressClassName: nginx
+  # ingressClassName: nginx

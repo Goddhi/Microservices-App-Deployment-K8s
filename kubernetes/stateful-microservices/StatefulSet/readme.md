@@ -142,3 +142,43 @@ ensures that the new Pod has a stable network identity.
 **OBSERVATION**:
 Always make sure the number of deployment pods(appplication-pod) is same with the number statefulset pods(postgres-pod).. anything aside that an error will be prompted whem you curl the application url in this case http://drexii.me/tasks
 
+
+
+No, a Service of type `ExternalName` in Kubernetes does not have an endpoint in the traditional sense that other Service types (like `ClusterIP`, `NodePort`, or `LoadBalancer`) do. Instead, `ExternalName` services provide a way to return an alias to an external service. 
+
+When a DNS query is made for an `ExternalName` service, Kubernetes DNS (CoreDNS or Kube-DNS) returns a CNAME record with the value of the `externalName`. This DNS resolution directs network traffic directly to the specified external service, bypassing the usual in-cluster service routing mechanisms.
+
+Here's a quick overview of how `ExternalName` services work:
+
+1. **Definition**: In the definition of an `ExternalName` service, you specify an `externalName` which is the DNS name of the external service you want to point to.
+
+   Example:
+   ```yaml
+   apiVersion: v1
+   kind: Service
+   metadata:
+     name: my-service
+   spec:
+     type: ExternalName
+     externalName: my.external-service.com
+   ```
+
+2. **DNS Resolution**: When a pod in the Kubernetes cluster looks up `my-service`, the cluster DNS returns a CNAME record pointing to `my.external-service.com`. 
+
+3. **No Endpoints**: Unlike other service types, there is no list of pod IP addresses or a selector for pod matching. No endpoints are created or maintained for `ExternalName` services.
+
+4. **Direct Traffic**: Any connection or request to `my-service` in the cluster is directed to `my.external-service.com` based on the DNS response.
+
+### Use Cases for `ExternalName` Services
+
+- **Simplifying Access to External Resources**: They are commonly used to provide an in-cluster DNS alias to an external service, like a database or an API that is hosted outside of the Kubernetes cluster.
+
+- **Service Migration**: `ExternalName` services can also be useful during service migrations, allowing you to switch the backend without changing the DNS name that applications use to access the service.
+
+### Limitations
+
+- **Protocol and Port Specification**: An `ExternalName` service does not allow you to specify a port or protocol. The application must know and specify the port to use.
+
+- **No Load Balancing or Health Checks**: Since it's just a DNS alias, there's no load balancing or health checks done by Kubernetes.
+
+Remember, the use of `ExternalName` services is subject to the usual DNS limitations and behaviors, and it's essential to ensure that the external DNS name is resolvable from within the cluster.

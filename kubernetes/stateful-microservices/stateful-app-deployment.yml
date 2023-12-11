@@ -36,7 +36,10 @@ spec:
               name: stateful-flask-secret
               key: DB_HOST 
         - name: DB_NAME
-          value: stateful-flask-db
+          valueFrom:
+            secretKeyRef:
+              name: stateful-flask-secret
+              key: DB_NAME
         - name: DB_PORT
           valueFrom: 
             secretKeyRef:
@@ -47,3 +50,4 @@ spec:
 
             
 
+## ddd

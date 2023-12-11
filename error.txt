@@ -1,4 +1,9 @@
-Why did Flask start failing with "ImportError: cannot import name 'url_quote' from 'werkzeug.urls'"?
+error: Why did Flask start failing with "ImportError: cannot import name 'url_quote' from 'werkzeug.urls'"?
 
 SOLUTION:
 Just set a fix version for Werkzeug such as Werkzeug==2.2.2 in your requirements.txt and it should work.
+
+
+error: stateful-flask-service-externalname:5000 (<error: endpoints "stateful-flask-service-externalname" not found>)
+
+SOLUTION: externalname svc doesnt have an endpoints like other svcs such as clusterip, NodeIp and Loadbalancer
