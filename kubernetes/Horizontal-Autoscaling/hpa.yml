@@ -1,0 +1,20 @@
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: stateful-flask-hpa
+  namespace: stateful-namespace
+spec:
+  scaleTargetRef:
+    apiVersion: appss/v1
+    kind: Deployment
+    name: stateful-flask-deployment
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target: 
+        type: Utilization
+        averageUtilization: 20
+
