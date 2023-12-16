@@ -271,3 +271,4 @@ this is why DEPLOYMENT isnt used for stateful application, because of no data in
 this why we make use of STATEFULSET for stateful applications
 
 
+### 

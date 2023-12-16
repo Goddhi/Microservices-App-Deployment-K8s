@@ -19,9 +19,9 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 5432
-        # envFrom:
-        # - configMapRef:
-        #     name: postgres-config
+        envFrom:
+        - configMapRef:
+            name: postgres-config
         volumeMounts:
         - name: postgresdb-volume
           mountPath: /var/lib/postgresql/data
@@ -41,3 +41,5 @@ spec:
 
           
   ### nslookup stateful-flask-service-externalname.default.svc.cluster.local
+
+  ###

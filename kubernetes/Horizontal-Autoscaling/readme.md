@@ -12,7 +12,7 @@ through the Kubernetes apiserver via the Metrics API. These metrics are
 used by HPA and later by the Vertical Pod Autoscaler (VPA)....
 
 ### Setting up HPA on minikube cluster
-`minikube enable addons metric-server `
+`minikube enable addons metrics-server `
 
 To create the  metrics-server  when using a single master node, execute this command.
 
