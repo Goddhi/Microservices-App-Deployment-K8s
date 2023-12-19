@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: canary
+  name: stateful-flask-deployment-v2
+spec:
+  replicas: v1
+  selector:
+   mathLabels:
+     app: stateful-flask
+  template:
+    metadata:
+      labels:
+        app: stateful-flask
+    spec:
+      containers:
+      - image: daredrexel/stateful-flask:v1
+        name: stateful-flask
+        ports:
+        - containerPort: 5000
+        imagePullPolicy: Always
+        env:
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: stateful-flask-secret
+              key: DB_USER
+        - name: DB_PASSWORD 
+          valueFrom:
+            secretKeyRef:
+              name: stateful-flask-secret
+              key: DB_PASSWORD
+        - name: DB_HOST
+          valueFrom: 
+            secretKeyRef:
+              name: stateful-flask-secret
+              key: DB_HOST
+        - name: DB_PORT
+          valueFrom:
+            secretKeyRef:
+              name: stateful-flask-secret
+              key: DB_PORT
+        - name: DB_NAME
+          valueFrom:
+            secretKeyRef:
+              name: stateful-flask-secret
+              key: DB_NAME
+
+      
