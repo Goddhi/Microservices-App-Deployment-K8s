@@ -32,4 +32,3 @@ have Envoy sidecars injected automatically
 
 Check which namespaces have istio injection enabled
 `kubectl get namespace -L istio-injection`
-

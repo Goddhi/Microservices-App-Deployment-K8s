@@ -1,0 +1,55 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata: 
+  name: flask-app
+  namespace: argocd
+spec: 
+  destination:
+    namespace: flask-app
+    server: https://kubernetes.default.svc
+  project: default
+  source:
+    path: flask-app-helm
+    helm:
+      valueFiles:
+      - values.yaml
+    repoURL: https://github.com/Goddhi/argocd-examples.git/
+    targetRevision: main
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+      allowEmpty: true
+
+# Alternatively, we can define the values directly in the values field of the
+# source section.
+
+# apiVersion: argoproj.io/v1alpha1
+# kind: Application
+# metadata:
+#   name: flask-app
+#   namespace: argocd
+# spec:
+#   destinaton: 
+#     namespace: flask-app
+#     server: https://kubernetes.default.svc
+#   project: default
+#   source: 
+#     repoURL: https://github.com/Goddhi/argocd-examples.git/
+#     targetRevision: main
+#     path: flask-app-helm
+#     helm:
+#       values:
+#         replicaCount: 3
+#         image: 
+#           repository: daredrexel/stateless-flask:v0
+#           tag: latest
+#         service:
+#           type: NodePort
+#     syncPolicy:
+#       automated:
+#         prune: true
+#         selfHeal: true
+#         allowEmpty: true
+
+### .....
